@@ -115,6 +115,51 @@
         //
         //PARAMS DU IOTHUB
         //
+        "IOThubname": {
+            "type": "string"
+        },
+        "IOTsku_name": {
+            "type": "string"
+        },
+        "IOTsku_units": {
+            "type": "string"
+        },
+        "IOTd2c_partitions": {
+            "type": "string"
+        },
+        "IOTfeatures": {
+            "type": "string"
+        },
+        "IOTtags": {
+            "type": "object"
+        },
+        "IOTcloudEnvironment": {
+            "type": "string",
+            "metadata": {
+                "description": "Cloud environment to deploy (i.e. usgov/china/ ...)"
+            },
+            "allowedValues": [
+                "public",
+                "china",
+                "usgov"
+            ],
+            "defaultValue": "public"
+        },
+        "IOTprincipalId": {
+            "type": "string"
+        },
+        "IOTroleDefinitionId": {
+            "type": "string"
+        },
+
+        //
+        //PARAMS DU DPS
+        //
+        "provisioningServices_dps_name": {
+            //"defaultValue": "Exa-iot-dps",
+            "type": "String"
+        },
+
 
         //
         //PARAMS DU APP INSIGHT
@@ -413,9 +458,59 @@
             "identity": {
                 "type": "SystemAssigned"
             }
-        }
+        },
+
          
+        //
+        //CREATION DE l'IOT HUB
+        //
+        {
+            "apiVersion": "2021-07-01-preview",
+            "type": "Microsoft.Devices/IotHubs",
+            "name": "[parameters('IOThubname')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "eventHubEndpoints": {
+                    "events": {
+                        "retentionTimeInDays": 1,
+                        "partitionCount": "[parameters('IOTd2c_partitions')]"
+                    }
+                },
+                "features": "[parameters('IOTfeatures')]",
+                "minTlsVersion": "1.2",
+                "disableLocalAuth": false
+            },
+            "sku": {
+                "name": "[parameters('IOTsku_name')]",
+                "capacity": "[parameters('IOTsku_units')]"
+            },
+            "tags": "[parameters('IOTtags')]"
+        },
+
+        //
+        //CREATION DU DPS
+        //
+
+        {
+            "type": "Microsoft.Devices/provisioningServices",
+            "apiVersion": "2021-10-15",
+            "name": "[parameters('provisioningServices_dps_name')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "state": "Active",
+                "provisioningState": "Succeeded",
+                "iotHubs": [],
+                "allocationPolicy": "Hashed"
+            }
+        }
+
         
+
         //
         //CREATION DE LA COSMOS DB
         //
