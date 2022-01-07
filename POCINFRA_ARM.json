@@ -1,0 +1,437 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        
+        //
+        //PARAMS GLOBAUX
+        //
+        "location": {
+            "type": "string"
+        },
+        "tenant": {
+            "type": "string"
+        },
+        //
+        //PARAMS DU VAULT
+        //
+        "Vaultname": {
+            "type": "string"
+        },
+        
+        "Vaultsku": {
+            "type": "string"
+        },
+        "VaultaccessPolicies": {
+            "type": "array"
+        },
+        
+        "VaultenabledForDeployment": {
+            "type": "bool"
+        },
+        "VaultenabledForTemplateDeployment": {
+            "type": "bool"
+        },
+        "VaultenabledForDiskEncryption": {
+            "type": "bool"
+        },
+        "VaultenableRbacAuthorization": {
+            "type": "bool"
+        },
+        "VaultenableSoftDelete": {
+            "type": "bool"
+        },
+        "VaultsoftDeleteRetentionInDays": {
+            "type": "int"
+        },
+        "VaultnetworkAcls": {
+            "type": "object"
+        },
+
+        //
+        //PARAMS DU CONTAINER REGISTRY
+        //
+        "ConRegregistryName": {
+            "type": "string"
+        },
+        "ConRegregistryLocation": {
+            "type": "string"
+        },
+        "ConRegzoneRedundancy": {
+            "type": "string"
+        },
+        "ConRegregistrySku": {
+            "type": "string"
+        },
+        "ConRegregistryApiVersion": {
+            "type": "string"
+        },
+        "ConRegtags": {
+            "type": "object"
+        },
+        "ConRegpublicNetworkAccess": {
+            "type": "string"
+        },
+
+        //
+        //PARAMS DU VNET
+        //
+
+        //Inutilisé ici
+        // "VnetextendedLocation": {
+        //     "type": "object"
+        // },
+        "VnetvirtualNetworkName": {
+            "type": "string"
+        },
+        "VnetresourceGroup": {
+            "type": "string"
+        },
+        "VnetaddressSpaces": {
+            "type": "array"
+        },
+        "Vnetipv6Enabled": {
+            "type": "bool"
+        },
+        "VnetsubnetCount": {
+            "type": "int"
+        },
+        "Vnetsubnet0_name": {
+            "type": "string"
+        },
+        "Vnetsubnet0_addressRange": {
+            "type": "string"
+        },
+        "VnetddosProtectionPlanEnabled": {
+            "type": "bool"
+        },
+        "VnetfirewallEnabled": {
+            "type": "bool"
+        },
+        "VnetbastionEnabled": {
+            "type": "bool"
+        },
+
+        //
+        //PARAMS DU IOTHUB
+        //
+
+        //
+        //PARAMS DU APP INSIGHT
+        //
+
+        //
+        //PARAMS DE LA COSMOS DB
+        //
+
+        //
+        //PARAMS DE L'AKS
+        //
+        
+        "aksClusterName": {
+            "type": "string"
+        },
+
+         "kubeversion": {
+            "type": "string"
+        },
+        
+        "dnsPrefix": {
+            "type": "string"
+        },
+        "agentPoolname": {
+            "type": "string"
+        },
+        "agentPoolcount": {
+            "type": "int"
+        },
+        "agentPoolvmSize": {
+            "type": "string"
+        },
+        "agentPoolosType": {
+            "type": "string"
+        },
+        "agentPoolstorageProfile": {
+            "type": "string"
+        },
+        "osDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 0,
+            "metadata": {
+                "description": "Taille de disque (en Gio) à provisionner pour chacun des nœuds du pool d'agents. Cette valeur est comprise entre 0 et 1023. La valeur 0 applique la taille de disque par défaut pour cet agentVMSize."
+            },
+            "minValue": 0,
+            "maxValue": 1023
+        },
+        
+        "networkPlugin": {
+            "type": "string",
+            "allowedValues": [
+                "azure",
+                "kubenet"
+            ],
+            "metadata": {
+                "description": "Plug-in réseau utilisé pour la création du réseau Kubernetes."
+            }
+        },
+        "enableRBAC": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Indicateur booléen à activer/désactiver pour RBAC."
+            }
+        },
+        "vmssNodePool": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Indicateur booléen à activer/désactiver pour les groupes de machines virtuelles identiques"
+            }
+        },
+        "windowsProfile": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Indicateur booléen à activer/désactiver pour les groupes de machines virtuelles identiques"
+            }
+        },
+        "enablePrivateCluster": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Activez l'accès réseau privé au cluster Kubernetes."
+            }
+        },
+        "enableHttpApplicationRouting": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Indicateur booléen à activer/désactiver pour le routage des applications HTTP."
+            }
+        },
+        "enableAzurePolicy": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Indicateur booléen à activer/désactiver pour le composant additionnel Azure Policy."
+            }
+        },
+        "acrName": {
+            "type": "string",
+            "metadata": {
+                "description": "Spécifiez le nom du registre de conteneurs Azure."
+            }
+        },
+        "acrResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du groupe de ressources auquel le registre de conteneurs est associé."
+            }
+        },
+        "guidValue": {
+            "type": "string",
+            "metadata": {
+                "description": "ID unique utilisé dans l'attribution de rôle du service Kubernetes au service Container Registry. Nous vous recommandons d'utiliser la valeur par défaut."
+            },
+            "defaultValue": "[newGuid()]"
+        }
+        
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            
+
+        //
+        //###################################################   CREATION DU RESOURCE GROUP ######################
+        //
+            "name": "Exa-IOT",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2021-05-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "tags": {}
+        },
+        {
+            //CREATION DU VAULT
+            //IL NE NECESSITE PAS DE RESOURCE GROUP  DONC FAIRE GAFFE A BIEN LE DELETE A LA MANO
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('Vaultname')]",
+            "location": "[parameters('location')]",
+            "type": "Microsoft.KeyVault/vaults",
+            "properties": {
+                "enabledForDeployment": "[parameters('VaultenabledForDeployment')]",
+                "enabledForTemplateDeployment": "[parameters('VaultenabledForTemplateDeployment')]",
+                "enabledForDiskEncryption": "[parameters('VaultenabledForDiskEncryption')]",
+                "enableRbacAuthorization": "[parameters('VaultenableRbacAuthorization')]",
+                "accessPolicies": "[parameters('VaultaccessPolicies')]",
+                "tenantId": "[parameters('tenant')]",
+                "sku": {
+                    "name": "[parameters('Vaultsku')]",
+                    "family": "A"
+                },
+                "enableSoftDelete": "[parameters('VaultenableSoftDelete')]",
+                "softDeleteRetentionInDays": "[parameters('VaultsoftDeleteRetentionInDays')]",
+                "networkAcls": "[parameters('VaultnetworkAcls')]"
+            },
+            "tags": {},
+            "dependsOn": []
+        },
+        {
+            
+
+        //
+        //###################################################   CREATION DU REPO POUR LES IMAGES DOCKERS ######################
+        //
+            "name": "[parameters('ConRegregistryName')]",
+            "type": "Microsoft.ContainerRegistry/registries",
+            "location": "[parameters('ConRegregistryLocation')]",
+            "apiVersion": "[parameters('ConRegregistryApiVersion')]",
+            "sku": {
+                "name": "[parameters('ConRegregistrySku')]"
+            },
+            "dependsOn": [],
+            "tags": "[parameters('ConRegtags')]",
+            "properties": {
+                "publicNetworkAccess": "[parameters('ConRegpublicNetworkAccess')]",
+                "zoneRedundancy": "[parameters('ConRegzoneRedundancy')]"
+            }
+        },
+            
+
+        //
+        //###################################################   CREATION DU VNET ######################
+        //
+            
+            {
+            "name": "[parameters('VnetvirtualNetworkName')]",
+            "type": "Microsoft.Network/VirtualNetworks",
+            "apiVersion": "2021-01-01",
+            "location": "[parameters('location')]",
+            //"extendedLocation": "[if(empty(parameters('VnetextendedLocation')), json('null'), parameters('VnetextendedLocation'))]",
+            "dependsOn": [],
+            "tags": {},
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "INFRA",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    }
+                ],
+                "enableDdosProtection": "[parameters('VnetddosProtectionPlanEnabled')]"
+                
+            }
+        },
+
+
+        //
+        //###################################################   CREATION DE l'AKS ######################
+        //
+
+
+         {
+            "name": "[parameters('aksClusterName')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "resourceGroup": "[parameters('acrResourceGroup')]",
+            "dependsOn": [
+                "[concat('Microsoft.ContainerService/managedClusters/', parameters('aksClusterName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "apiVersion": "2018-09-01-preview",
+                            "type": "Microsoft.ContainerRegistry/registries/providers/roleAssignments",
+                            "name": "[concat(parameters('acrName'), '/Microsoft.Authorization/', parameters('guidValue'))]",
+                            "properties": {
+                                "principalId": "[reference(parameters('aksClusterName'), '2021-07-01').identityProfile.kubeletidentity.objectId]",
+                                "principalType": "ServicePrincipal",
+                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                                "scope": "[resourceId(parameters('acrResourceGroup'),'Microsoft.ContainerRegistry/registries/', parameters('acrName'))]"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-07-01",
+            "dependsOn": [],
+            "type": "Microsoft.ContainerService/managedClusters",
+            "location": "[parameters('location')]",
+            "name": "[parameters('aksClusterName')]",
+            "properties": {
+                "kubernetesVersion": "[parameters('kubeversion')]",
+                "enableRBAC": "[parameters('enableRBAC')]",
+                "dnsPrefix": "[parameters('dnsPrefix')]",
+                "agentPoolProfiles": [
+                    {
+                        "name": "[parameters('agentPoolname')]",
+                        "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+                        "count": "[parameters('agentPoolcount')]",
+                        "enableAutoScaling": false,
+                        "vmSize": "[parameters('agentPoolvmSize')]",
+                        "osType": "[parameters('agentPoolosType')]",
+                        "storageProfile": "[parameters('agentPoolstorageProfile')]",
+                        "type": "VirtualMachineScaleSets",
+                        "mode": "System",
+                        "maxPods": 110,
+                        "availabilityZones": [],
+                        "enableNodePublicIP": false,
+                        "tags": {}
+                    }
+                ],
+                "networkProfile": {
+                    "loadBalancerSku": "standard",
+                    "networkPlugin": "[parameters('networkPlugin')]"
+                },
+                "apiServerAccessProfile": {
+                    "enablePrivateCluster": "[parameters('enablePrivateCluster')]"
+                },
+                "addonProfiles": {
+                    "httpApplicationRouting": {
+                        "enabled": "[parameters('enableHttpApplicationRouting')]"
+                    },
+                    "azurepolicy": {
+                        "enabled": "[parameters('enableAzurePolicy')]"
+                    }
+                }
+            },
+            "tags": {},
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        }
+         
+        
+        //
+        //CREATION DE LA COSMOS DB
+        //
+
+
+        
+        
+        
+        
+    ],
+    "outputs": {
+
+ "controlPlaneFQDN": {
+            "type": "string",
+            "value": "[reference(concat('Microsoft.ContainerService/managedClusters/', parameters('aksClusterName'))).fqdn]"
+        }
+
+    }
+}

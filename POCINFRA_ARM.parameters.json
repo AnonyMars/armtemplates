@@ -1,0 +1,242 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        //
+        //PARAMS GLOBAUX
+        //
+        "location": {
+            "value": "eastus"
+        },
+
+        "tenant": {
+            "value": "14bc5219-40ca-4d62-a8e4-7c97c1236349"
+        },
+
+        //
+        //PARAMS DU VAULT
+        //
+        "Vaultname": {
+            "value": "Exa-IOT-Vault"
+        },
+        
+        "Vaultsku": {
+            "value": "Standard"
+        },
+        "VaultaccessPolicies": {
+            "value": [
+                {
+                    //Object ID de l'utilisateur Azure basé sur Azure AD qui disposera des droits
+                    "objectId": "f6c8edcb-e53f-4e3c-ab47-944f5b5c4b81",
+                    //se démerder pour que tenantid fasse appelle à la variable tenant tout court
+                    "tenantId": "14bc5219-40ca-4d62-a8e4-7c97c1236349",
+                    "permissions": {
+                        "keys": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "secrets": [
+                            "Get",
+                            "List",
+                            "Set",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "certificates": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore",
+                            "ManageContacts",
+                            "ManageIssuers",
+                            "GetIssuers",
+                            "ListIssuers",
+                            "SetIssuers",
+                            "DeleteIssuers"
+                        ]
+                    }
+                    
+                }
+            ]
+        },
+        
+        "VaultenabledForDeployment": {
+            "value": false
+        },
+        "VaultenabledForTemplateDeployment": {
+            "value": true
+        },
+        "VaultenabledForDiskEncryption": {
+            "value": false
+        },
+        "VaultenableRbacAuthorization": {
+            "value": false
+        },
+        "VaultenableSoftDelete": {
+            "value": true
+        },
+        "VaultsoftDeleteRetentionInDays": {
+            "value": 90
+        },
+        "VaultnetworkAcls": {
+            "value": {
+                "defaultAction": "allow",
+                "bypass": "AzureServices",
+                "ipRules": [],
+                "virtualNetworkRules": []
+            }
+        },
+
+        ///
+        //PARAMS DU CONTAINER REGISTRY
+        //
+
+        "ConRegregistryName": {
+            "value": "ExaIOTConRegistry"
+        },
+        "ConRegregistryLocation": {
+            //se démerder pour link le truc à la location globale
+            "value": "eastus"
+            
+        },
+        "ConRegzoneRedundancy": {
+            "value": "disabled"
+        },
+        "ConRegregistrySku": {
+            "value": "Basic"
+        },
+        "ConRegregistryApiVersion": {
+            "value": "2020-11-01-preview"
+        },
+        "ConRegtags": {
+            "value": {}
+        },
+        "ConRegpublicNetworkAccess": {
+            "value": "Enabled"
+        },
+
+        //
+        //PARAMS DU IOTHUB
+        //
+
+        //
+        //PARAMS DU APP INSIGHT
+        //
+
+        //
+        //PARAMS DE LA COSMOS DB
+        //
+
+        
+        //
+        //PARAMS DU VNET
+        //
+
+        //ExtendedLocation commentée car inutile
+        // "VnetextendedLocation": {
+        //     "value": {}
+        // },
+        "VnetvirtualNetworkName": {
+            "value": "Exa-IOT-Vnet"
+        },
+        "VnetresourceGroup": {
+            //changer la valeur
+            "value": "Exa-IOT"
+        },
+        "VnetaddressSpaces": {
+            "value": [
+                "10.0.0.0/16"
+            ]
+        },
+        "Vnetipv6Enabled": {
+            "value": false
+        },
+        "VnetsubnetCount": {
+            "value": 1
+        },
+        "Vnetsubnet0_name": {
+            "value": "INFRA"
+        },
+        "Vnetsubnet0_addressRange": {
+            "value": "10.0.0.0/24"
+        },
+        "VnetddosProtectionPlanEnabled": {
+            "value": false
+        },
+        "VnetfirewallEnabled": {
+            "value": false
+        },
+        "VnetbastionEnabled": {
+            "value": false
+        },
+
+        //
+        //PARAMS DE L'AKS
+        //
+
+        "aksClusterName": {
+            "value": "Exa-IOT_AKS"
+        },
+        "acrResourceGroup": {
+            "value": "Exa-IOT"
+        },
+        "kubeversion": {
+            "value": "1.21.7"
+        },
+
+        "dnsPrefix": {
+            "value": "Exa-IOTAKS-dns"
+        },
+        "agentPoolname": {
+            "value": "agentpool"
+        },
+        "agentPoolcount": {
+            "value": 1
+        },
+        "agentPoolvmSize": {
+            "value": "Standard_B2s"
+        },
+        "agentPoolosType": {
+            "value": "Linux"
+        },
+        "agentPoolstorageProfile": {
+            "value": "ManagedDisks"
+        },
+        "networkPlugin": {
+            "value": "kubenet"
+        },
+        "enableRBAC": {
+            "value": true
+        },
+        "enablePrivateCluster": {
+            "value": false
+        },
+        "enableHttpApplicationRouting": {
+            "value": false
+        },
+        "enableAzurePolicy": {
+            "value": false
+        },
+        "vmssNodePool": {
+            "value": true
+        },
+        "acrName": {
+            "value": "ExaIOTConRegistry"
+        }
+        
+    }
+}
