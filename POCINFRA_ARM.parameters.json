@@ -9,6 +9,10 @@
             "value": "eastus"
         },
 
+        "locationName": {
+            "value": "East US"
+        },
+
         "tenant": {
             "value": "14bc5219-40ca-4d62-a8e4-7c97c1236349"
         },
@@ -178,7 +182,16 @@
         //
         //PARAMS DE LA COSMOS DB
         //
-
+        "CosmosDBname": {
+            "value": "exa-iot-cosmos-db"
+        },
+        
+        "defaultExperience": {
+            "value": "Core (SQL)"
+        },
+        "isZoneRedundant": {
+            "value": "false"
+        },
         
         //
         //PARAMS DU VNET

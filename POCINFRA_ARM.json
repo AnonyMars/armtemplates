@@ -9,6 +9,9 @@
         "location": {
             "type": "string"
         },
+        "locationName": {
+            "type": "string"
+        },
         "tenant": {
             "type": "string"
         },
@@ -168,6 +171,17 @@
         //
         //PARAMS DE LA COSMOS DB
         //
+
+        "CosmosDBname": {
+            "type": "string"
+        },
+        
+        "defaultExperience": {
+            "type": "string"
+        },
+        "isZoneRedundant": {
+            "type": "string"
+        },
 
         //
         //PARAMS DE L'AKS
@@ -507,7 +521,7 @@
                 "iotHubs": [],
                 "allocationPolicy": "Hashed"
             }
-        }
+        },
 
         
 
@@ -515,7 +529,45 @@
         //CREATION DE LA COSMOS DB
         //
 
-
+        {
+            "apiVersion": "2021-10-15-preview",
+            "kind": "GlobalDocumentDB",
+            "type": "Microsoft.DocumentDb/databaseAccounts",
+            "name": "[parameters('CosmosDBname')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "id": "[concat(parameters('CosmosDBname'), '-', parameters('location'))]",
+                        "failoverPriority": 0,
+                        "locationName": "[parameters('locationName')]"
+                    }
+                ],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 8,
+                        "backupStorageRedundancy": "Geo"
+                    }
+                },
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "ipRules": [],
+                "dependsOn": [],
+                "capabilities": [
+                    {
+                        "name": "EnableServerless"
+                    }
+                ],
+                "enableFreeTier": false
+            },
+            "tags": {
+                "defaultExperience": "[parameters('defaultExperience')]",
+                "hidden-cosmos-mmspecial": ""
+            }
+        }
         
         
         
