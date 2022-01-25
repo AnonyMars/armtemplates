@@ -7,7 +7,8 @@
         //PARAMS GLOBAUX
         //
         "location": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         },
         "locationName": {
             "type": "string"
@@ -285,7 +286,8 @@
             "type": "string",
             "metadata": {
                 "description": "Nom du groupe de ressources auquel le registre de conteneurs est associé."
-            }
+            },
+            "defaultValue":"Exa-IOT"
         },
         "guidValue": {
             "type": "string",
@@ -299,19 +301,17 @@
     "functions": [],
     "variables": {},
     "resources": [
-        {
-            
 
-        //
+        //{         
         //###################################################   CREATION DU RESOURCE GROUP ######################
         //
-            "name": "Exa-IOT",
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-05-01",
-            "location": "[parameters('location')]",
-            "dependsOn": [],
-            "tags": {}
-        },
+        //     "name": "Exa-IOT",
+        //     "type": "Microsoft.Resources/resourceGroups",
+        //     "apiVersion": "2021-05-01",
+        //     "location": "[parameters('location')]",
+        //     "dependsOn": [],
+        //     "tags": {}
+        // },
         {
             //CREATION DU VAULT
             //IL NE NECESSITE PAS DE RESOURCE GROUP  DONC FAIRE GAFFE A BIEN LE DELETE A LA MANO
@@ -343,6 +343,7 @@
         //
         //###################################################   CREATION DU REPO POUR LES IMAGES DOCKERS ######################
         //
+        //IL NE NECESSITE PAS DE RESOURCE GROUP  DONC FAIRE GAFFE A BIEN LE DELETE A LA MANO
             "name": "[parameters('ConRegregistryName')]",
             "type": "Microsoft.ContainerRegistry/registries",
             "location": "[parameters('ConRegregistryLocation')]",
