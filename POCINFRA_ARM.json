@@ -398,7 +398,7 @@
 
 
          {
-            "name": "[parameters('aksClusterName')]",
+            "name": "[concat('K8S',parameters('aksClusterName'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "resourceGroup": "[parameters('acrResourceGroup')]",
