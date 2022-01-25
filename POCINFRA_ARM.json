@@ -169,6 +169,30 @@
         //PARAMS DU APP INSIGHT
         //
 
+        "AppInsightname": {
+            "type": "string"
+        },
+        "AppInsighttype": {
+            "type": "string"
+        },
+        "AppInsightregionId": {
+            "type": "string"
+        },
+        "AppInsighttagsArray": {
+            "type": "object"
+        },
+        "AppInsightrequestSource": {
+            "type": "string"
+        },
+        "AppInsightworkspaceResourceId": {
+            "type": "string"
+        },
+
+
+
+
+
+
         //
         //PARAMS DE LA COSMOS DB
         //
@@ -519,12 +543,60 @@
             "properties": {
                 "state": "Active",
                 "provisioningState": "Succeeded",
+                //lier automatiquement au iothub
                 "iotHubs": [],
                 "allocationPolicy": "Hashed"
             }
         },
 
-        
+
+        ///
+        ///CREATION DE L'APP INSIGHT
+        ///    
+
+        {
+            "name": "[parameters('AppInsightname')]",
+            "type": "microsoft.insights/components",
+            "location": "[parameters('AppInsightregionId')]",
+            "tags": "[parameters('AppInsighttagsArray')]",
+            "apiVersion": "2020-02-02-preview",
+            "dependsOn": [
+                "NewWorkspaceTemplate"
+            ],
+            "properties": {
+                "ApplicationId": "[parameters('AppInsightname')]",
+                "Application_Type": "[parameters('AppInsighttype')]",
+                "Flow_Type": "Redfield",
+                "Request_Source": "[parameters('AppInsightrequestSource')]",
+                "WorkspaceResourceId": "[parameters('AppInsightworkspaceResourceId')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "NewWorkspaceTemplate",
+            "resourceGroup": "DefaultResourceGroup-EUS",
+            "subscriptionId": "46f6d2e7-4c2e-42f9-bd7e-3fe6c38a0bdb",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "apiVersion": "2020-08-01",
+                            "name": "DefaultWorkspace-46f6d2e7-4c2e-42f9-bd7e-3fe6c38a0bdb-EUS",
+                            "type": "Microsoft.OperationalInsights/workspaces",
+                            "location": "[parameters('location')]",
+                            "properties": {}
+                        }
+                    ]
+                }
+            }
+        },
+
 
         //
         //CREATION DE LA COSMOS DB

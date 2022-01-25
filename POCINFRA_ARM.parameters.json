@@ -179,6 +179,28 @@
         //PARAMS DU APP INSIGHT
         //
 
+        "AppInsighttype": {
+            "value": "web"
+        },
+        "AppInsightname": {
+            "value": "Exa-IOT-AppInsight"
+        },
+        "AppInsightregionId": {
+            "value": "eastus"
+        },
+        "AppInsighttagsArray": {
+            "value": {}
+        },
+        "AppInsightrequestSource": {
+            "value": "IbizaAIExtension"
+        },
+        "AppInsightworkspaceResourceId": {
+            "value": "/subscriptions/46f6d2e7-4c2e-42f9-bd7e-3fe6c38a0bdb/resourcegroups/DefaultResourceGroup-EUS/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-46f6d2e7-4c2e-42f9-bd7e-3fe6c38a0bdb-EUS"
+        },
+
+
+
+
         //
         //PARAMS DE LA COSMOS DB
         //
