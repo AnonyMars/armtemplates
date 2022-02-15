@@ -319,8 +319,50 @@
                 "description": "ID unique utilisé dans l'attribution de rôle du service Kubernetes au service Container Registry. Nous vous recommandons d'utiliser la valeur par défaut."
             },
             "defaultValue": "[newGuid()]"
+        },
+
+        //
+        //PARAMS DE L'APP FUNCTION
+        //
+        "FunctionsubscriptionId": {
+            "type": "string"
+        },
+        "Functionname": {
+            "type": "string"
+        },
+        "FunctionhostingPlanName": {
+            "type": "string"
+        },
+        "FunctionserverFarmResourceGroup": {
+            "type": "string"
+        },
+        "FunctionalwaysOn": {
+            "type": "bool"
+        },
+        "Functionuse32BitWorkerProcess": {
+            "type": "bool"
+        },
+        "FunctionstorageAccountName": {
+            "type": "string"
+        },
+        "FunctionnetFrameworkVersion": {
+            "type": "string"
+        },
+        "Functionsku": {
+            "type": "string"
+        },
+        "FunctionskuCode": {
+            "type": "string"
+        },
+        "FunctionworkerSize": {
+            "type": "string"
+        },
+        "FunctionworkerSizeId": {
+            "type": "string"
+        },
+        "FunctionnumberOfWorkers": {
+            "type": "string"
         }
-        
     },
     "functions": [],
     "variables": {},
@@ -640,8 +682,101 @@
                 "defaultExperience": "[parameters('defaultExperience')]",
                 "hidden-cosmos-mmspecial": ""
             }
-        }
+        },
+
+        //
+        // Création de l'APP FUNCTION
+        //
         
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('Functionname')]",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('FunctionhostingPlanName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('FunctionstorageAccountName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('Functionname')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "e042fc9f-94c9-4d2a-8c96-3e49e0c30558"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "InstrumentationKey=e042fc9f-94c9-4d2a-8c96-3e49e0c30558;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('FunctionstorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionstorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('FunctionstorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionstorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[concat(toLower(parameters('Functionname')), 'ac0e')]"
+                        }
+                    ],
+                    "cors": {
+                        "allowedOrigins": [
+                            "https://portal.azure.com"
+                        ]
+                    },
+                    "use32BitWorkerProcess": "[parameters('Functionuse32BitWorkerProcess')]",
+                    "netFrameworkVersion": "[parameters('FunctionnetFrameworkVersion')]"
+                },
+                "serverFarmId": "[concat('/subscriptions/', parameters('FunctionsubscriptionId'),'/resourcegroups/', parameters('FunctionserverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('FunctionhostingPlanName'))]",
+                "clientAffinityEnabled": false
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('FunctionhostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "name": "[parameters('FunctionhostingPlanName')]",
+                "workerSize": "[parameters('FunctionworkerSize')]",
+                "workerSizeId": "[parameters('FunctionworkerSizeId')]",
+                "numberOfWorkers": "[parameters('FunctionnumberOfWorkers')]"
+            },
+            "sku": {
+                "Tier": "[parameters('Functionsku')]",
+                "Name": "[parameters('FunctionskuCode')]"
+            }
+        },
+        {
+            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('FunctionstorageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2"
+            }
+        }
         
         
         

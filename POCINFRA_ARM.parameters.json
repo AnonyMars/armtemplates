@@ -309,7 +309,50 @@
         },
         "acrName": {
             "value": "ExaIOTConRegistry"
+        },
+
+        //
+        //PARAMS DE L'APP FUNCTION
+        //
+        "FunctionsubscriptionId": {
+            "value": "46f6d2e7-4c2e-42f9-bd7e-3fe6c38a0bdb"
+        },
+        "Functionname": {
+            "value": "exa-iot-function"
+        },
+        "FunctionhostingPlanName": {
+            "value": "Exaiot-function-hostingplan"
+        },
+        "FunctionserverFarmResourceGroup": {
+            "value": "Exa-iot"
+        },
+        "FunctionalwaysOn": {
+            "value": false
+        },
+        "FunctionstorageAccountName": {
+            "value": "exaiotfunctionappstorageaccount"
+        },
+        "Functionsku": {
+            "value": "Dynamic"
+        },
+        "FunctionskuCode": {
+            "value": "Y1"
+        },
+        "FunctionworkerSize": {
+            "value": "0"
+        },
+        "FunctionworkerSizeId": {
+            "value": "0"
+        },
+        "FunctionnumberOfWorkers": {
+            "value": "1"
+        },
+        "Functionuse32BitWorkerProcess": {
+            "value": true
+        },
+        "FunctionnetFrameworkVersion": {
+            "value": "v6.0"
         }
-        
+
     }
 }
